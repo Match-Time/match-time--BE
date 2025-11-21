@@ -22,18 +22,29 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
+                        // 🔥 Swagger 허용 경로 추가
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
+
+                        // 🔥 기존 허용 경로 유지
                         .requestMatchers("/api/users", "/api/login", "/ping").permitAll()
+
+                        // 🔥 나머지는 인증 필요
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin
                         .loginProcessingUrl("/api/login")
                         .usernameParameter("email")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/api/ping") // Redirect to a generic page on success
+                        .defaultSuccessUrl("/api/ping")
                 )
                 .logout(logout -> logout
                         .logoutUrl("/api/logout")
-                        .logoutSuccessUrl("/api/ping") // Redirect to a generic page on logout
+                        .logoutSuccessUrl("/api/ping")
                 );
 
         return http.build();
