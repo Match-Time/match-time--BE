@@ -3,10 +3,11 @@ WORKDIR /workspace
 
 COPY gradlew build.gradle settings.gradle /workspace/
 COPY gradle /workspace/gradle
-COPY src /workspace/src
-
 RUN apt-get update && apt-get install -y dos2unix && dos2unix gradlew
 RUN chmod +x gradlew
+RUN ./gradlew dependencies --no-daemon
+
+COPY src /workspace/src
 
 RUN ./gradlew clean bootJar --no-daemon
 
