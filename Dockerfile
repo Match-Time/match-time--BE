@@ -10,7 +10,6 @@ RUN chmod +x gradlew
 
 RUN ./gradlew clean bootJar --no-daemon
 
-
 FROM bellsoft/liberica-openjdk-debian:17
 
 COPY --from=builder /workspace/build/libs/*.jar /app.jar
