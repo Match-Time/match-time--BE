@@ -10,9 +10,11 @@ WORKDIR /workspace
 COPY gradlew build.gradle settings.gradle /workspace/
 COPY gradle /workspace/gradle
 
-# 의존성 설치 및 실행 준비
 RUN apt-get update && apt-get install -y dos2unix && dos2unix gradlew
 RUN chmod +x gradlew
+RUN ./gradlew dependencies --no-daemon
+
+COPY src /workspace/src
 
 # 소스 코드 복사
 COPY src /workspace/src
